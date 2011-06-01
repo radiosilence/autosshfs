@@ -4,7 +4,7 @@ import subprocess
 import sys
 import json
 
-config = json.loads(open('config.json').read())
+config = json.loads(open('/etc/autosshfs.json').read())
 
 if __name__ == '__main__':
     notify = False
@@ -14,9 +14,6 @@ if __name__ == '__main__':
         if sys.argv[1] == 'mount':
             for share in config['shares']:
                 args = [
-                    'sudo',
-                    '-u',
-                    config['user'],
                     'sshfs',
                     share[0],
                     share[1]
@@ -33,9 +30,6 @@ if __name__ == '__main__':
         elif sys.argv[1] == 'unmount':
             for share in config['shares']:
                 args = [
-                    'sudo',
-                    '-u',
-                    config['user'],
                     'fusermount',
                     '-u',
                     share[1]
