@@ -1,0 +1,6 @@
+{
+    "user": "myuser",
+    "shares": [
+        ["myuser@example.com:/var", "/home/myuser/Remote/example"]
+    ]
+}
