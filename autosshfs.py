@@ -3,8 +3,12 @@ import pynotify
 import subprocess
 import sys
 import json
+import glib
 
-config = json.loads(open('/etc/autosshfs.json').read())
+def get_path():
+    return '/'.join(__file__.split('/')[:-1]) + '/'
+
+config = json.loads(open(get_path() + 'autosshfs.json').read())
 
 if __name__ == '__main__':
     notify = False
@@ -25,8 +29,11 @@ if __name__ == '__main__':
                 except subprocess.CalledProcessError:
                     n = pynotify.Notification("AutoSSHFS Mount Failed",
                         '%s' % (share[0]))
-                n.set_timeout(1)
-                n.show()
+                try:
+                    n.set_timeout(1)
+                    n.show()
+                except glib.GError:
+                    print "Failed to open display."
         elif sys.argv[1] == 'unmount':
             for share in config['shares']:
                 args = [
@@ -41,7 +48,10 @@ if __name__ == '__main__':
                 except subprocess.CalledProcessError:
                     n = pynotify.Notification("AutoSSHFS Unmount Failed",
                         '%s' % (share[0]))
-                n.set_timeout(1)
-                n.show()
+                try:
+                    n.set_timeout(1)
+                    n.show()
+                except glib.GError:
+                    print "Failed to open display."
     except IndexError:
         print "Usage: %s [mount|unmount]" % sys.argv[0]
